@@ -80,9 +80,17 @@ app.get('/buscarAlimentos',(req, res) => {
 
 app.post('/enviarAlimentos', (req, res) => {
     console.log()
-    const dadosEnviados = {
-        AlimentoRecebido:req.body.alimento,
-        TipoDeAlimentoRecebido:req.body.tipodealimento
+    const dadosRecebidos = req.body
+
+    const dadosParaEnviar = {
+        nome_do_alimento_recebido: dadosRecebidos.alimento,
+        tipo_de_alimento_recebido: dadosRecebidos.tipodealimento,
+        data_de_validade_recebida: dadosRecebidos.data_de_validade,
+        estoque_recebido: dadosRecebidos.estoque,
+        preco_recebido: dadosRecebidos.preco,
+        imagem_recebida: dadosRecebidos.imagem,
+        descricao_recebida: dadosRecebidos.descricao,
+        fornecedor_recebido: dadosRecebidos.fornecedor
     };
     console.log(dadosEnviados)
     if(dadosEnviados.AlimentoRecebido === ''|| dadosEnviados.TipoDeAlimentoRecebido === ''){
@@ -90,7 +98,7 @@ app.post('/enviarAlimentos', (req, res) => {
     }
     else {
 /*     client.query(`
-        INSERT INTO alimentos(fruta, vegetal, enlatado,data_de_validade,preco,fornecedor,url_imagem)
+        INSERT INTO alimentos(nome,tipo_de_alimento,data_de_validade,preco,fornecedor,url_imagem)
         values($1,$2,$3))`
     )
 */
