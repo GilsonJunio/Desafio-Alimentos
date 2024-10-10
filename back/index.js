@@ -1,10 +1,15 @@
+/*
+TODO:
+Definir função para validar valores
+*/
+
 const cors = require('cors');
 const express = require('express');
 const dotenv = require('dotenv');
 const { Pool } = require('pg');
 const app = express();
 
-require('dotenv').config({path:'.env.production'})
+require('dotenv').config({path:'.env.development'})
 /*console.log(process.env)
 */
 
@@ -15,6 +20,15 @@ const client = new Pool({
             password: process.env.DB_PASS,
             port: process.env.DB_PORT
 })
+
+async function buscarDados(){
+    const buscar = await client.query("SELECT * FROM alimentos")
+    const dados =  await buscar.rows
+    console.log(buscar)
+    console.log(dados)
+    return dados
+}
+buscarDados()
 /*const createPool = () => { 
     if (process.env.NODE_ENV === "production") {
         return new Pool({ connectionString: process.env.DB_URL, ssl: { rejectUnauthorized: false } });
@@ -29,79 +43,64 @@ const client = new Pool({
         });
     }
 };*/
-/*console.log(process.env)
-console.log(client)*/
-
-/*const criarTabela = client.query(`
-    CREATE TABLE alimentos if not exists(
-    id SERIAL PRIMARY KEY,
-    Fruta VARCHAR(20) NOT NULL,
-    Vegetal VARCHAR(20) NOT NULL,
-    Enlatado VARCHAR(20) NOT NULL,
-    )
-
-    `)
-const inserirDados = client.query(`
-    CREATE TABLE alimentos if not exists(
-    id SERIAL PRIMARY KEY,
-    Fruta VARCHAR(20) NOT NULL,
-    Vegetal VARCHAR(20) NOT NULL,
-    Enlatado VARCHAR(20) NOT NULL,
-    )
-
-    `)*/
 
 
 const port = 6000;
 const address = 'http://localhost:';
 
+function Validar_Valores(DadoRecebido,DadoNecessario){
+    const tipoDeDadoRecebido = typeof DadoRecebido
+    const tipoDeDadoNecessario = typeof DadoNecessario[1]
+    if(tipoDeDadoRecebido!=tipoDeDadoNecessario){
+        console.log('Dados incompatíveis!')
+    }
+}
+Validar_Valores('olá!',0)
 
 app.use(express.json());
 app.use(cors());
 
-app.get('/buscarAlimentos',(req, res) => {
-    client.query(`
-        CREATE TABLE if not exists alimentos(
-        id SERIAL PRIMARY KEY,
-        nome VARCHAR(20) NOT NULL,
-        tipo_de_alimento VARCHAR(20) NOT NULL,
-        data_de_validade DATE,
-        preco DECIMAL(10,2)
-        estoque INT,
-        fornecedor VARCHAR(50),
-        descricao VARCHAR(100),
-        url_imagem TEXT,
-        )`
-    )
-//	console.log(query)
-
-    res.status(200).json('Alimentos buscados com sucesso!');
+app.get('/buscarAlimentos', (req, res) => {
+    const buscar = buscarDados()
+    buscar.then(dados =>{
+    res.status(200).send(dados);    
+    })
+//    res.send(dados)
+    
 });
 
 app.post('/enviarAlimentos', (req, res) => {
-    console.log()
     const dadosRecebidos = req.body
+   // console.log(dadosRecebidos)
 
     const dadosParaEnviar = {
-        nome_do_alimento_recebido: dadosRecebidos.alimento,
-        tipo_de_alimento_recebido: dadosRecebidos.tipodealimento,
-        data_de_validade_recebida: dadosRecebidos.data_de_validade,
-        estoque_recebido: dadosRecebidos.estoque,
-        preco_recebido: dadosRecebidos.preco,
-        imagem_recebida: dadosRecebidos.imagem,
-        descricao_recebida: dadosRecebidos.descricao,
-        fornecedor_recebido: dadosRecebidos.fornecedor
+        Nome_Do_Alimento_Recebido: dadosRecebidos.dadosfornecidos.alimento,
+        Data_De_Validade_Recebida: dadosRecebidos.dadosfornecidos.data_de_validade,
+        Estoque_Recebido: dadosRecebidos.dadosfornecidos.estoque,
+        Preco_Recebido: dadosRecebidos.dadosfornecidos.preco,
+        Imagem_Recebida: dadosRecebidos.dadosfornecidos.imagem,
+        Descricao_Recebida: dadosRecebidos.dadosfornecidos.descricao,
+        Fornecedor_Recebido: dadosRecebidos.dadosfornecidos.fornecedor,
+        Tipo_De_Alimento_Recebido: dadosRecebidos.tipodealimento,
     };
-    console.log(dadosEnviados)
-    if(dadosEnviados.AlimentoRecebido === ''|| dadosEnviados.TipoDeAlimentoRecebido === ''){
+    console.log(dadosParaEnviar)
+    if(dadosParaEnviar.AlimentoRecebido === ''|| dadosParaEnviar.TipoDeAlimentoRecebido === ''){
         res.status(400).json('Alimento vazio ou nenhum tipo de alimento especificado');        
     }
     else {
-/*     client.query(`
-        INSERT INTO alimentos(nome,tipo_de_alimento,data_de_validade,preco,fornecedor,url_imagem)
-        values($1,$2,$3))`
-    )
-*/
+     client.query(`
+        INSERT INTO alimentos(nome,tipo_de_alimento,data_de_validade,preco,fornecedor,url_imagem,descricao,estoque)
+        values($1,$2,$3,$4,$5,$6,$7,$8)`,[
+        dadosParaEnviar.Nome_Do_Alimento_Recebido,
+        dadosParaEnviar.Tipo_De_Alimento_Recebido,
+        dadosParaEnviar.Data_De_Validade_Recebida,
+        dadosParaEnviar.Preco_Recebido,
+        dadosParaEnviar.Fornecedor_Recebido,
+        dadosParaEnviar.Imagem_Recebida,
+        dadosParaEnviar.Descricao_Recebida,
+        dadosParaEnviar.Estoque_Recebido,
+        ])
+
         
     }
 });
