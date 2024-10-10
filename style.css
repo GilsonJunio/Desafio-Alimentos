@@ -1,1 +1,14 @@
-
+table{
+	border: 1px solid;
+}
+th{
+	border: 1px solid;
+}
+tr{
+	border: 1px solid;
+}
+td{
+	padding: 10px;
+	border: 1px solid;
+	text-align: center;
+}
