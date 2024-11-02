@@ -133,7 +133,13 @@ async function Buscar_Dados(){
 }
 
 function Adicionar_Botoes_De_Apagar_e_Editar(){
-	const acoes = document.querySelectorAll('.acoes')
+	const primeiroID = parseInt(linhas[1].id)
+
+	switch (primeiroID) {
+		case 2:
+			console.log(1111111)
+			break;
+	}
 
 	const botoesEdicao ={
 		botaoEditar:document.createElement('button'),
@@ -141,14 +147,23 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 	}
 	botoesEdicao.botaoEditar.textContent = 'EDITAR'
 	botoesEdicao.botaoApagar.textContent = 'APAGAR'
-	
-	for(let i = 1; i<acoes.length;i++){
-		acoes[i].innerHTML=`
-			<button class="editar_${i}">EDITAR</button>
-			<button class="apagar_${i}">APAGAR</button>
+
+	for(let i = primeiroID; i<acoes.length+primeiroID;i++){
+		console.log(i)
+		//console.log(acoes.length)
+		acoes[1].innerHTML=`
+				<button class="editar_${primeiroID}">EDITAR</button>
+				<button class="apagar_${primeiroID}">APAGAR</button>
 		`
+		if(acoes[i] != undefined){
+			acoes[i].innerHTML=`
+				<button class="editar_${i}">EDITAR</button>
+				<button class="apagar_${i}">APAGAR</button>
+			`
+
+		}
 	}
-	for(let i = 0; i<botoes.length;i++){
+	for(let i = primeiroID; i<botoes.length + primeiroID;i++){
 		let botoesEdicao = document.querySelector(`.editar_${i}`)
 		let botoesApagar = document.querySelector(`.apagar_${i}`)
 
@@ -159,6 +174,7 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 			botoesApagar.addEventListener('click',botaoClicado=>{
 				const nomeDoBotaoClicado = botaoClicado.target.className
 				const ID_Do_Botao_Apertado = nomeDoBotaoClicado[nomeDoBotaoClicado.length-1]
+				console.log(ID_Do_Botao_Apertado)
 				Apagar_Dados(ID_Do_Botao_Apertado)
 			})		
 
@@ -259,8 +275,18 @@ async function Renderizar_Dados(){
 				tdFruta.textContent = dado.nome;
 				tdFruta.className=`fruta_${dado.id}`
 
+				const tratamentoDaDataDeValidade = () => {
+					let dataDeValidade = []
+					for (let i = 0; i <10; i++){
+						dataDeValidade.push(dado.data_de_validade[i])
+
+					}
+					
+					return dataDeValidade.join('')
+				}
+
 				let tdDataDeValidade = document.createElement('td')			
-				tdDataDeValidade.textContent =dado.data_de_validade; 
+				tdDataDeValidade.textContent = tratamentoDaDataDeValidade(); 
 				tdDataDeValidade.className=`datadevalidade_${dado.id}`
 
 				let tdFornecedor = document.createElement('td')			

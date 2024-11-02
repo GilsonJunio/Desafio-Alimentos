@@ -7,37 +7,40 @@
 	<title></title>
 </head>
 <body>
-		<label>Nome do alimento</label>
-		<input type="text" name="alimento">
-		<br>
-			<label>Tipo de Alimento</label>
-		<br>
-			<label>Fruta</label>
-			<input type="checkbox" name="checkboxFruta">
-		<br>
-			<label>Vegetal</label>
-			<input type="checkbox" name="checkboxVegetal">
-		<br>
-		<label>Enlatado</label>
-			<input type="checkbox" name="checkboxEnlatado">
-		<br>
-		<label>Fornecedor</label>
-		<input type="text" name="fornecedor">
-		<br>
-		<label>Data de Validade</label>
-		<input type="date" name="datadevalidade">
-		<br>
-		<label>Preço</label>
-		<input type="number" name="preco">				
-		<br>
-		<label>Estoque</label>
-		<input type="number" name="estoque">
-		<br>
-		<label>Descrição</label>
-		<textarea name="descricao"></textarea>
-		<label>Imagem</label>
-		<input type="url" name="imagem">
+	<main class="caixaDeInputs">
+		<div class="dados">
+			<label>Nome do alimento</label>
+			<input type="text" name="alimento">
+		</div>
+
+		<div class="dados">
+				<label>Tipo de Alimento</label>
+				<label>Fruta</label>
+				<input type="checkbox" name="checkboxFruta">
+				<label>Vegetal</label>
+				<input type="checkbox" name="checkboxVegetal">
+			<label>Enlatado</label>
+				<input type="checkbox" name="checkboxEnlatado">
+		</div>
+		
+		<div class="dados">
+			<label>Fornecedor</label>
+				<input type="text" name="fornecedor">
+			<label>Data de Validade</label>
+				<input type="date" name="datadevalidade">
+		<div class="dados"></div>	
+			<label>Preço</label>
+			<input type="number" name="preco">				
+			<label>Estoque</label>
+			<input type="number" name="estoque">			
+		</div>
+			<label>Descrição</label>
+			<textarea name="descricao"></textarea>
+			<label>Imagem</label>
+				<input type="url" name="imagem">
+		</div>
 		<button name="enviar">Enviar</button>
+	</main>
 	<table>
 		<th>Nome</th>
 		<th>Tipo de Alimento</th>

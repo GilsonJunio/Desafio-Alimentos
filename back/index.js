@@ -41,7 +41,7 @@ const pool = createPool()
 app.use(express.json());
 app.use(cors());
 
-app.get('/buscarAlimentos', (req, res) => {
+app.get('/buscarAlimentos', async(req, res) => {
 
     const buscar = buscarDados()
     buscar.then(dados =>{

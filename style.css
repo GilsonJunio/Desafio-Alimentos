@@ -2,16 +2,33 @@ table{
 	border: 1px solid;
 }
 th{
-	border: 1px solid;
+	border: 5px solid;
 }
 tr{
 	border: 1px solid;
 }
 td{
 	padding: 10px;
-	border: 1px solid;
+	border: 5px solid;
 	text-align: center;
 }
 img{
 	width: 200px;
+}
+.caixaDeInputs{
+	display: flex;
+	flex-direction:row ;
+	margin: 50px;
+	flex-wrap: wrap;
+	width: 70%;
+}
+main.caixaDeInputs:nth-child(3){
+	background-color: red;
+}
+.caixaDeInputs button.enviar{
+	display: flex;
+	flex-direction: column;
+}
+.dados label{
+
 }
