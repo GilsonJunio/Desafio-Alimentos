@@ -11,6 +11,10 @@ PARA EDITAR OU APAGAR
 09-10-2024
 ADICIONAR UM FOR NA FUNÇÃO DADOS FORNECIDOS
 
+05-11-2024
+ADICIONAR O MALDITO ID DO DADO NOS BOTOES EDITAR E APAGAR POR MEIO DO ID DA LINHA CORRESPONDENTE.
+ISSO PRECISA SER FEITO NO MUTATIONOBSERVER
+
 */
 /*
 NOTAS:
@@ -133,13 +137,135 @@ async function Buscar_Dados(){
 }
 
 function Adicionar_Botoes_De_Apagar_e_Editar(){
-	const primeiroID = parseInt(linhas[1].id)
+	const targetNode = document; // Replace with the ID of the parent element
+	const config = { childList: true, subtree: true };
+	const callback = function(mutationsList, observer) {
+		for(const mutation of mutationsList) {
+			if (mutation.type === 'childList') {
+				const addedNodes = mutation.addedNodes;
+				
 
-	switch (primeiroID) {
-		case 2:
-			console.log(1111111)
-			break;
-	}
+
+				for (const node of addedNodes) {
+					//console.log(teste(node))
+					/*if (node === linhas[1]){
+						console.log('Element found!');
+						console.log(node)
+						console.log(node.id)
+						observer.disconnect(); // Stop observing after finding the element
+					}
+*/
+/*					switch (node) {
+						case linhas[1]:
+							alert('message?: DOMString')
+							console.log(node)
+							console.log(node.id)							
+						case linhas[0]:
+							alert('111111111')
+					}*/
+					//const primeiroID = linha[1].id
+					for(let i = 0; i < 0+acoes.length; i++){
+
+						switch (node) {
+/*							case acoes[i]:
+								console.log(node)
+								const oi = 'oi'
+*/							case linhas[i]:
+								const Linha = node
+								const idDaLinha = parseInt(Linha.id)
+								console.log(idDaLinha)
+
+								const caixasDeAcoes = Linha.lastChild 
+									console.log(`LINHA Nº: ${i}`)
+									console.log(Linha)
+									console.log(caixasDeAcoes)
+								const botaoEditar = document.createElement('button')
+									botaoEditar.textContent= `EDITAR`
+									botaoEditar.className= `editar_${idDaLinha}`
+
+								const botaoApagar = document.createElement('button')
+									botaoApagar.textContent= `APAGAR`
+									botaoApagar.className= `apagar_${idDaLinha}`
+								
+								caixasDeAcoes.appendChild(botaoEditar)
+								caixasDeAcoes.appendChild(botaoApagar)
+
+								botaoEditar.addEventListener('click',Botao_Clicado =>{
+									alert('oi')
+									const classeDoBotao = Botao_Clicado.target.className
+
+									if(classeDoBotao.length > 8){
+										const idDoBotaoClicado = classeDoBotao.slice(-2)
+										console.log(idDoBotaoClicado)
+										Habilitar_Edicao(Botao_Clicado.target)
+									}
+									else{
+										Habilitar_Edicao(Botao_Clicado.target)
+
+									}
+								})
+								botaoApagar.addEventListener('click',Botao_Clicado =>{
+									alert('oi')
+									const caixaDeAcaoParente = Botao_Clicado.target.parentElement
+									const LinhaParente = caixaDeAcaoParente.parentElement
+									const idDaLinhaParente = parseInt(LinhaParente.id)
+									console.log(Botao_Clicado)
+									console.log(caixaDeAcaoParente)
+									console.log(LinhaParente)
+									console.log(idDaLinhaParente)
+
+									Apagar_Dados(idDaLinhaParente)
+								})															
+							}
+/*
+						if(node === linhas[1]){
+							console.log('---------------')
+							console.log(node)
+
+
+						}						*/
+					}
+				
+
+
+
+
+
+
+
+				}
+
+
+
+
+
+
+			}
+		}
+	};
+
+	const observer = new MutationObserver(callback);
+	observer.observe(targetNode, config);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+	const primeiraLinha = linhas[1]
+	console.log(primeiraLinha)
+	const primeiroID = parseInt(linhas[1].id)
 
 	const botoesEdicao ={
 		botaoEditar:document.createElement('button'),
@@ -152,9 +278,11 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 		console.log(i)
 		//console.log(acoes.length)
 		acoes[1].innerHTML=`
-				<button class="editar_${primeiroID}">EDITAR</button>
-				<button class="apagar_${primeiroID}">APAGAR</button>
+				<button class="editar_${i}">EDITAR</button>
+				<button class="apagar_${i}">APAGAR</button>
 		`
+
+			acoes[i].appendChild(botoesEdicao.botaoEditar)
 		if(acoes[i] != undefined){
 			acoes[i].innerHTML=`
 				<button class="editar_${i}">EDITAR</button>
@@ -180,11 +308,11 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 
 		}
 
-	}
+	}*/
 }
 
 function Reconhecer_Novos_Valores(ID_Da_Linha_Alterada){
-	const linhaAlterada = linhas[ID_Da_Linha_Alterada]
+	const linhaAlterada = document.getElementById(`${ID_Da_Linha_Alterada}`) //linhas[ID_Da_Linha_Alterada]
 	console.log(linhaAlterada)	
 	const camposDaLinhaAlterada = linhaAlterada.children
 	console.log(camposDaLinhaAlterada)
@@ -202,21 +330,45 @@ function Reconhecer_Novos_Valores(ID_Da_Linha_Alterada){
 }
 
 function Habilitar_Edicao(Botao_Clicado){
-	let idDoBotaoClicado = Botao_Clicado.className[Botao_Clicado.className.length-1]
+	console.log('BOTÃO CLICADO')
+		console.log(Botao_Clicado)
 
-	let LinhaParente = linhas[idDoBotaoClicado]
+	const classeDoBotao = Botao_Clicado.className
+		console.log('CLASSE DO BOTÃO')
+		console.log(classeDoBotao)
+	
+	let idDoBotaoClicado = classeDoBotao[Botao_Clicado.className.length-1]
+
+	const caixaDeAcaoParente = Botao_Clicado.parentElement
+		console.log('caixaDeAcaoParente')
+		console.log(caixaDeAcaoParente)
+	
+	const LinhaParente = caixaDeAcaoParente.parentElement
+		console.log('LinhaParente')
+		console.log(LinhaParente)
+	const idDaLinhaParente = parseInt(LinhaParente.id)
+		console.log('idDaLinhaParente')
+		console.log(idDaLinhaParente)
+
+	if(classeDoBotao.length > 8){
+		console.log('A CLASSE DO BOTÃO TEM MAIS DE 8 CARACTERES')
+
+		//idDoBotaoClicado = classeDoBotao.slice(-2)
+		idDoBotaoClicado = classeDoBotao.substring(7,classeDoBotao.length)
+		console.log('ID DO BOTÃO RECORTADO CORRETAMENTE!')
+		console.log(idDoBotaoClicado)
+	}
+	
 	const CamposDoParente = LinhaParente.children
 	let valoresAntigos = []
 	const novosCampos = []
 	const capturarNovosValores = []
 
 	const Botao_Concluido = document.createElement('button')
-	Botao_Concluido.textContent = "CONCLUÍDO"
-	Botao_Concluido.className = `concluido_${idDoBotaoClicado}`
+		Botao_Concluido.textContent = "CONCLUÍDO"
+		Botao_Concluido.className = `concluido_${idDoBotaoClicado}`
 
-	const Campos_De_Acoes = document.getElementsByClassName("acoes")
-
-	const Campo_Do_Botao_Clicado = Campos_De_Acoes[idDoBotaoClicado]
+//	const Campo_Do_Botao_Clicado = Campos_De_Acoes[idDoBotaoClicado]
 	
 	const Botao_De_Editar_Atual = document.querySelector(`.${Botao_Clicado.className}`)
 
@@ -224,8 +376,8 @@ function Habilitar_Edicao(Botao_Clicado){
 		valoresAntigos.push(CamposDoParente[i].textContent)
 
 		const NovosCamposDeDados = document.createElement('input')
-		NovosCamposDeDados.className = `novoscamposdados_${i}`
-		NovosCamposDeDados.value = valoresAntigos[i]
+			NovosCamposDeDados.className = `novoscamposdados_${i}`
+			NovosCamposDeDados.value = valoresAntigos[i]
 		CamposDoParente[i].replaceChildren(NovosCamposDeDados)
 	}
 	
@@ -233,10 +385,14 @@ function Habilitar_Edicao(Botao_Clicado){
 
 	Botao_Concluido.addEventListener('click',Botao_Clicado=>{
 		alert('DadosAtualizados!')
-		idDoBotaoClicado = Botao_Clicado.target.className.length-1
+		const classeDoBotao = Botao_Clicado.target.className
+		if(classeDoBotao.length > 8){
+			console.log(classeDoBotao)
+		}
+		//ID_Da_Linha_Alterada = classeDoBotao.slice()		
+		ID_Da_Linha_Alterada = idDoBotaoClicado
+			console.log(ID_Da_Linha_Alterada)		
 
-		ID_Da_Linha_Alterada = Botao_Clicado.target.className[idDoBotaoClicado]
-		
 		const novosValores = Reconhecer_Novos_Valores(ID_Da_Linha_Alterada)
 		
 		for(let i = 0; i<CamposDoParente.length-1;i++){
