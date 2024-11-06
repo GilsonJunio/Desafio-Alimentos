@@ -100,7 +100,9 @@ app.post('/enviarAlimentos', (req, res) => {
 });
 
 app.put('/editarAlimentos', (req, res) => {
+    console.log('CHEGARAM DADOS PARA EDITAR')
     const dados = req.body.dadosparaeditar;
+    console.log(dados)
     
     console.log(dados.campo_tipodealimento)
     pool.query(
@@ -113,7 +115,7 @@ app.put('/editarAlimentos', (req, res) => {
             dados.campo_estoque,
             dados.campo_fornecedor,
             dados.campo_descricao,
-            dados.url_imagem,
+            dados.campo_imagem,
             dados.campo_iddalinha])
 
     res.status(200).json('Alimentos editados com sucesso!');

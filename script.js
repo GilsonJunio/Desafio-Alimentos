@@ -332,9 +332,15 @@ function Reconhecer_Novos_Valores(ID_Da_Linha_Alterada){
 	console.log(camposDaLinhaAlterada)
 
 	const novosValores = []
+
+	// ESTE TRECHO  ABAIXO VISTORIA OS CAMPOS DE INPUT COM A CLASSE .novoscamposdados_ID 
+	// DEPOIS EMPURRA OS VALORES ADICIONADOS AOS INPUTS NO ARRAY novosValores
+	// SOMENTE OS TEXTOS SÃO ADICIONADOS AO ARRAY 	
 	for(let i = 0; i<camposDaLinhaAlterada.length-1;i++){
 		const Campos_Dos_Novos_Valores = document.querySelector(`.novoscamposdados_${i}`)//camposDaLinhaAlterada[i].children
-		console.log(Campos_Dos_Novos_Valores)
+			console.log('ELEMENTOS INPUT QUE TERÃO SEUS VALORES RECONHECIDOS')
+			console.log(Campos_Dos_Novos_Valores)
+
 		novosValores.push(Campos_Dos_Novos_Valores.value)
 
 	}
@@ -364,16 +370,16 @@ function Habilitar_Edicao(Botao_Clicado){
 		console.log('idDaLinhaParente')
 		console.log(idDaLinhaParente)
 
+
 	if(classeDoBotao.length > 8){
 		console.log('A CLASSE DO BOTÃO TEM MAIS DE 8 CARACTERES')
-
-		//idDoBotaoClicado = classeDoBotao.slice(-2)
 		idDoBotaoClicado = classeDoBotao.substring(7,classeDoBotao.length)
-		console.log('ID DO BOTÃO RECORTADO CORRETAMENTE!')
-		console.log(idDoBotaoClicado)
+			console.log('ID DO BOTÃO RECORTADO CORRETAMENTE!')
+			console.log(idDoBotaoClicado)
 	}
 	
 	const CamposDoParente = LinhaParente.children
+
 	let valoresAntigos = []
 	const novosCampos = []
 	const capturarNovosValores = []
@@ -381,37 +387,78 @@ function Habilitar_Edicao(Botao_Clicado){
 	const Botao_Concluido = document.createElement('button')
 		Botao_Concluido.textContent = "CONCLUÍDO"
 		Botao_Concluido.className = `concluido_${idDoBotaoClicado}`
-
-//	const Campo_Do_Botao_Clicado = Campos_De_Acoes[idDoBotaoClicado]
 	
 	const Botao_De_Editar_Atual = document.querySelector(`.${Botao_Clicado.className}`)
 
-	for(let i = 0; i< CamposDoParente.length-1;i++){
-		valoresAntigos.push(CamposDoParente[i].textContent)
+	/* AQUI SERÃO REMOVIDOS OS TEXTOS NODE  DOS TDS DA LINHA PRENTE DO BOTÃO CLICADO */
+	console.log('QUANTIDADE DE FILHOS DA LINHA CLICADA')
+	console.log(CamposDoParente.length)
+	console.log(CamposDoParente)
 
-		const NovosCamposDeDados = document.createElement('input')
+	for(let i = 0; i< CamposDoParente.length-1;i++){
+
+		valoresAntigos.push(CamposDoParente[i].textContent) // ARMAZENAMENTO DOS VALORES ANTES DA SUBSTITUIÇÃO
+		if(CamposDoParente[i] === document.querySelector(`.imagem_${idDaLinhaParente}`)){
+			alert('message?: DOMString')
+		}
+
+		const NovosCamposDeDados = document.createElement('input') //DEFINIÇÃO DOS NOVOS INPUTS
 			NovosCamposDeDados.className = `novoscamposdados_${i}`
 			NovosCamposDeDados.value = valoresAntigos[i]
-		CamposDoParente[i].replaceChildren(NovosCamposDeDados)
+		
+		CamposDoParente[i].replaceChildren(NovosCamposDeDados) // SUBSTITUIÇÃO
 	}
 	
 	Botao_De_Editar_Atual.replaceWith(Botao_Concluido)
+
+
+
+
+
+
 
 	Botao_Concluido.addEventListener('click',Botao_Clicado=>{
 		alert('DadosAtualizados!')
 		const classeDoBotao = Botao_Clicado.target.className
 		if(classeDoBotao.length > 8){
 			console.log(classeDoBotao)
-		}
-		//ID_Da_Linha_Alterada = classeDoBotao.slice()		
+		}		
 		ID_Da_Linha_Alterada = idDoBotaoClicado
 			console.log(ID_Da_Linha_Alterada)		
 
 		const novosValores = Reconhecer_Novos_Valores(ID_Da_Linha_Alterada)
-		
+			console.log('VALORES QUE RETORNARAM DA FUNÇÃO Reconhecer_Novos_Valores:')
+			console.log(novosValores)
+
+	
+
+
+		// OS NOVOS VALORES SERÃO REPASSADOS AOS TDS DA LINHA PARENTE
+		// NO CASO, SOMENTE OS TEXTOS.
+		// ISSO PROVAVELMENTE VAI ME GERAR UMA BOA DOR DE CABEÇA POR CAUSA QUE A IMAGEM NÃO VAI RECEBER SEU SRC
 		for(let i = 0; i<CamposDoParente.length-1;i++){
+			//console.log(CamposDoParente[i])
 			CamposDoParente[i].replaceChildren(novosValores[i])
+			//console.log(CamposDoParente[i])
+
+			switch (CamposDoParente[i]) {
+				case document.querySelector(`.tdimagem_${ID_Da_Linha_Alterada}`):
+					//alert('message?: DOMString')
+					//console.log(CamposDoParente[i])
+				 	const novaImagem = document.createElement('img')
+				 		novaImagem.className = `imagem_${ID_Da_Linha_Alterada}`
+				 		novaImagem.src = novosValores[novosValores.length-1]
+				 	CamposDoParente[i].replaceChildren(novaImagem)
+
+					// statements_1
+					break;
+				default:
+					// statements_def
+					break;
+			}
 		}
+
+
 
 		const campos = {
 			campo_iddalinha:ID_Da_Linha_Alterada,
@@ -422,7 +469,7 @@ function Habilitar_Edicao(Botao_Clicado){
 			campo_preco:document.querySelector(`.preco_${ID_Da_Linha_Alterada}`).textContent,
 			campo_estoque:document.querySelector(`.estoque_${ID_Da_Linha_Alterada}`).textContent,
 			campo_descricao:document.querySelector(`.descricao_${ID_Da_Linha_Alterada}`).textContent,
-			campo_imagem:document.querySelector(`.imagem_${ID_Da_Linha_Alterada}`).src
+			campo_imagem:document.querySelector(`.imagem_${ID_Da_Linha_Alterada}`).src // ESSE ELEMENTO AQUI NÃO EXISTE APÓS A RESUBSTIUIÇÃO. POR ISSO ESSA CARNIÇA NÃO TA ENVIANDO
 		}
 		console.log(ID_Da_Linha_Alterada)
 		console.log(campos)
@@ -468,10 +515,14 @@ async function Renderizar_Dados(){
 				tdDescricao.textContent = dado.descricao;
 				tdDescricao.className=`descricao_${dado.id}`
 				
-				let tdImagem = document.createElement('img')			
-				tdImagem.src = dado.url_imagem;
-				tdImagem.className=`imagem_${dado.id}`
-							
+
+				let imagem = document.createElement('img')			
+				imagem.src = dado.url_imagem;
+				imagem.className=`url_imagem_${dado.id}`
+
+				let tdImagem = document.createElement('td')			
+				tdImagem.className=`tdimagem_${dado.id}`
+
 				let tdTipoDeAlimento = document.createElement('td')			
 				tdTipoDeAlimento.textContent = dado.tipo_de_alimento;
 				tdTipoDeAlimento.className=`tipodealimento_${dado.id}`
@@ -495,6 +546,7 @@ async function Renderizar_Dados(){
 				tr.appendChild(tdEstoque)
 				tr.appendChild(tdDescricao)
 				tr.appendChild(tdImagem)
+				tdImagem.appendChild(imagem)
 				tr.appendChild(acoes)
 			})		
 	})
@@ -543,6 +595,7 @@ botoes.enviar.addEventListener('click',()=>{
 	console.log(campos.datadevalidade.value)
 	Enviar_Dados(Dados_Fornecidos(),Tipo_De_Alimento_Marcado())
 	Renderizar_Dados()
+	location.reload()
 })
 
 Renderizar_Dados() 
