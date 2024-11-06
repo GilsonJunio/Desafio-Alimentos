@@ -45,7 +45,7 @@ testar isso posteriormente
 
 */
 
-const address = "http://localhost:6000"
+const address = "http://localhost:8000"
 const servicos = {
 	enviar:"/enviarAlimentos",
 	buscar:"/buscarAlimentos",
@@ -415,6 +415,7 @@ function Habilitar_Edicao(Botao_Clicado){
 		
 		Editar_Dados(campos)
 		const Botao_Enviar = document.createElement('button')
+		//location.reload()
 	})
 }
 
@@ -505,7 +506,7 @@ async function Enviar_Dados(dadosFornecidos,tipoDeAlimento){
 }
 
 async function Editar_Dados(dados){
-	const req = await fetch('http://localhost:6000/editarAlimentos',{
+	const req = await fetch(address+servicos.editar,{
 		method:'PUT',
 		headers:{'Content-Type':'Application/JSON'},
 		body:JSON.stringify({

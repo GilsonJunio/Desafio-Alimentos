@@ -7,7 +7,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const { Pool } = require('pg');
 const app = express();
-const port = 6000;
+const port = 8000;
 const address = 'http://localhost:';
 require('dotenv').config({path:'.env.development'})
 
@@ -42,7 +42,19 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/buscarAlimentos', async(req, res) => {
+    pool.query(`CREATE TABLE if not exists alimentos(
+        id serial primary key,
+        nome varchar(20) not null,
+        tipo_de_alimento varchar(10) not null,
+        fornecedor varchar(30) not null,
+        data_de_validade date not null,
+        preco decimal(10,2) not null,
+        estoque int not null,
+        descricao varchar(50) not null,
+        url_imagem text
 
+
+        )`)
     const buscar = buscarDados()
     buscar.then(dados =>{
     res.status(200).send(dados);    
