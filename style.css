@@ -118,7 +118,7 @@ table {
     border: 1px solid #ccc;
     border-radius: 8px;
     overflow: hidden;
-    margin-top: 40px;
+    margin-top: 1px;
 }
 
 th, td {

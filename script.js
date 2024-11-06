@@ -151,40 +151,18 @@ async function Buscar_Dados(){
 }
 
 function Adicionar_Botoes_De_Apagar_e_Editar(){
-	const targetNode = document; // Replace with the ID of the parent element
+	const targetNode = document;
 	const config = { childList: true, subtree: true };
 	const callback = function(mutationsList, observer) {
+
 		for(const mutation of mutationsList) {
 			if (mutation.type === 'childList') {
 				const addedNodes = mutation.addedNodes;
-				
-
-
 				for (const node of addedNodes) {
-					//console.log(teste(node))
-					/*if (node === linhas[1]){
-						console.log('Element found!');
-						console.log(node)
-						console.log(node.id)
-						observer.disconnect(); // Stop observing after finding the element
-					}
-*/
-/*					switch (node) {
-						case linhas[1]:
-							alert('message?: DOMString')
-							console.log(node)
-							console.log(node.id)							
-						case linhas[0]:
-							alert('111111111')
-					}*/
-					//const primeiroID = linha[1].id
 					for(let i = 0; i < 0+acoes.length; i++){
 
 						switch (node) {
-/*							case acoes[i]:
-								console.log(node)
-								const oi = 'oi'
-*/							case linhas[i]:
+							case linhas[i]:
 								const Linha = node
 								const idDaLinha = parseInt(Linha.id)
 								console.log(idDaLinha)
@@ -205,8 +183,8 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 								caixasDeAcoes.appendChild(botaoApagar)
 
 								botaoEditar.addEventListener('click',Botao_Clicado =>{
-									alert('oi')
-									const classeDoBotao = Botao_Clicado.target.className
+										//alert('oi')
+										const classeDoBotao = Botao_Clicado.target.className
 
 									if(classeDoBotao.length > 8){
 										const idDoBotaoClicado = classeDoBotao.slice(-2)
@@ -218,6 +196,7 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 
 									}
 								})
+
 								botaoApagar.addEventListener('click',Botao_Clicado =>{
 									alert('oi')
 									const caixaDeAcaoParente = Botao_Clicado.target.parentElement
@@ -231,99 +210,18 @@ function Adicionar_Botoes_De_Apagar_e_Editar(){
 									Apagar_Dados(idDaLinhaParente)
 								})															
 							}
-/*
-						if(node === linhas[1]){
-							console.log('---------------')
-							console.log(node)
-
-
-						}						*/
 					}
-				
-
-
-
-
-
-
-
 				}
-
-
-
-
-
-
 			}
 		}
 	};
 
 	const observer = new MutationObserver(callback);
 	observer.observe(targetNode, config);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-	const primeiraLinha = linhas[1]
-	console.log(primeiraLinha)
-	const primeiroID = parseInt(linhas[1].id)
-
-	const botoesEdicao ={
-		botaoEditar:document.createElement('button'),
-		botaoApagar:document.createElement('button')
-	}
-	botoesEdicao.botaoEditar.textContent = 'EDITAR'
-	botoesEdicao.botaoApagar.textContent = 'APAGAR'
-
-	for(let i = primeiroID; i<acoes.length+primeiroID;i++){
-		console.log(i)
-		//console.log(acoes.length)
-		acoes[1].innerHTML=`
-				<button class="editar_${i}">EDITAR</button>
-				<button class="apagar_${i}">APAGAR</button>
-		`
-
-			acoes[i].appendChild(botoesEdicao.botaoEditar)
-		if(acoes[i] != undefined){
-			acoes[i].innerHTML=`
-				<button class="editar_${i}">EDITAR</button>
-				<button class="apagar_${i}">APAGAR</button>
-			`
-
-		}
-	}
-	for(let i = primeiroID; i<botoes.length + primeiroID;i++){
-		let botoesEdicao = document.querySelector(`.editar_${i}`)
-		let botoesApagar = document.querySelector(`.apagar_${i}`)
-
-		if(botoesEdicao!=null || botoesApagar!=null){
-			botoesEdicao.addEventListener('click',botaoClicado=>{
-				Habilitar_Edicao(botaoClicado.target)
-			})
-			botoesApagar.addEventListener('click',botaoClicado=>{
-				const nomeDoBotaoClicado = botaoClicado.target.className
-				const ID_Do_Botao_Apertado = nomeDoBotaoClicado[nomeDoBotaoClicado.length-1]
-				console.log(ID_Do_Botao_Apertado)
-				Apagar_Dados(ID_Do_Botao_Apertado)
-			})		
-
-		}
-
-	}*/
 }
+
+
+
 
 function Reconhecer_Novos_Valores(ID_Da_Linha_Alterada){
 	const linhaAlterada = document.getElementById(`${ID_Da_Linha_Alterada}`) //linhas[ID_Da_Linha_Alterada]
@@ -398,13 +296,22 @@ function Habilitar_Edicao(Botao_Clicado){
 	for(let i = 0; i< CamposDoParente.length-1;i++){
 
 		valoresAntigos.push(CamposDoParente[i].textContent) // ARMAZENAMENTO DOS VALORES ANTES DA SUBSTITUIÇÃO
-		if(CamposDoParente[i] === document.querySelector(`.imagem_${idDaLinhaParente}`)){
-			alert('message?: DOMString')
-		}
-
+		
 		const NovosCamposDeDados = document.createElement('input') //DEFINIÇÃO DOS NOVOS INPUTS
 			NovosCamposDeDados.className = `novoscamposdados_${i}`
 			NovosCamposDeDados.value = valoresAntigos[i]
+
+		switch (CamposDoParente[i]){
+			case document.querySelector(`.tdimagem_${idDaLinhaParente}`):
+				const campoDeImagem = CamposDoParente[i].firstChild.src
+				//alert(campoDeImagem)
+				NovosCamposDeDados.value=campoDeImagem
+				// statements_1
+				break;
+			default:
+				// statements_def
+				break;
+		}
 		
 		CamposDoParente[i].replaceChildren(NovosCamposDeDados) // SUBSTITUIÇÃO
 	}
@@ -466,7 +373,7 @@ function Habilitar_Edicao(Botao_Clicado){
 			campo_tipodealimento:document.querySelector(`.tipodealimento_${ID_Da_Linha_Alterada}`).textContent,
 			campo_fornecedor:document.querySelector(`.fornecedor_${ID_Da_Linha_Alterada}`).textContent,
 			campo_datadevalidade:document.querySelector(`.datadevalidade_${ID_Da_Linha_Alterada}`).textContent,
-			campo_preco:document.querySelector(`.preco_${ID_Da_Linha_Alterada}`).textContent,
+			campo_preco:document.querySelector(`.preco_${ID_Da_Linha_Alterada}`).textContent.substring(3,document.querySelector(`.preco_${ID_Da_Linha_Alterada}`).textContent.length),
 			campo_estoque:document.querySelector(`.estoque_${ID_Da_Linha_Alterada}`).textContent,
 			campo_descricao:document.querySelector(`.descricao_${ID_Da_Linha_Alterada}`).textContent,
 			campo_imagem:document.querySelector(`.imagem_${ID_Da_Linha_Alterada}`).src // ESSE ELEMENTO AQUI NÃO EXISTE APÓS A RESUBSTIUIÇÃO. POR ISSO ESSA CARNIÇA NÃO TA ENVIANDO
@@ -475,7 +382,9 @@ function Habilitar_Edicao(Botao_Clicado){
 		console.log(campos)
 		
 		Editar_Dados(campos)
+		
 		const Botao_Enviar = document.createElement('button')
+
 		//location.reload()
 	})
 }
@@ -524,11 +433,11 @@ async function Renderizar_Dados(){
 				tdImagem.className=`tdimagem_${dado.id}`
 
 				let tdTipoDeAlimento = document.createElement('td')			
-				tdTipoDeAlimento.textContent = dado.tipo_de_alimento;
+				tdTipoDeAlimento.textContent = dado.tipo_de_alimento.toUpperCase();
 				tdTipoDeAlimento.className=`tipodealimento_${dado.id}`
 				
 				let tdPreco = document.createElement('td')			
-				tdPreco.textContent = dado.preco;
+				tdPreco.textContent = "R$ " + dado.preco;
 				tdPreco.className=`preco_${dado.id}`
 				
 				let tdEstoque = document.createElement('td')
@@ -595,7 +504,7 @@ botoes.enviar.addEventListener('click',()=>{
 	console.log(campos.datadevalidade.value)
 	Enviar_Dados(Dados_Fornecidos(),Tipo_De_Alimento_Marcado())
 	Renderizar_Dados()
-	location.reload()
+//	location.reload()
 })
 
 Renderizar_Dados() 
