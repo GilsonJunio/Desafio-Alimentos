@@ -44,6 +44,20 @@ para tratar os dados com await faz alguma diferença na promise, mas posso
 testar isso posteriormente
 
 */
+/*
+TODO:
+
+QUASE 100% PRONTO, FALTA RESOLVER O PROBLEMA DA PAGINA RENDERIZAR 
+AO ENVIAR OS DADOS, EDITAR E APAGAR
+
+TAMBÉM PRECISA IMPLEMENTAR UM CAMPO DE INPUT NA IMAGEM PARA ELA NAO FICAR QUEBRADA AO EDITAR
+
+
+
+
+
+
+*/
 
 const address = "http://localhost:8000"
 const servicos = {
